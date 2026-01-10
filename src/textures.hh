@@ -4,7 +4,7 @@
 
 class Textures {
 public:
-	void operator()(std::string path, float x, float y, float width, float height) noexcept;
+	Vector2 operator()(std::string path, float x, float y, float width, float height) noexcept;
 
 	~Textures() noexcept;
 
