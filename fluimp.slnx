@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="fluimp.vcxproj" Id="f5e366f7-e4b3-466f-ab2a-32f1db5dded2" />
+</Solution>
