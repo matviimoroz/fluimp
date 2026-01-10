@@ -25,9 +25,6 @@
     <ClCompile Include="src\main.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\fs_corner_radius.hh">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\fluimp.hh">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -35,6 +32,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\fluimp.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\textures.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\textures.hh">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -45,6 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\win32.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shaders.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

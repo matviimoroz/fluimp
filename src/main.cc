@@ -18,4 +18,6 @@ int main() {
 			fluimp.running = false;
 		}
 	}
+
+	fluimp.cleanup();
 }

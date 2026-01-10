@@ -109,6 +109,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)external\raylib\include</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -125,6 +126,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,14 +143,16 @@
   <ItemGroup>
     <ClCompile Include="src\fluimp.cc" />
     <ClCompile Include="src\fluimp.hh" />
-    <ClCompile Include="src\fs_corner_radius.hh" />
     <ClCompile Include="src\main.cc" />
+    <ClCompile Include="src\textures.hh" />
     <ClCompile Include="src\win32.cc" />
+    <ClCompile Include="src\textures.cc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="x64\Debug\1.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\shaders.hh" />
     <ClInclude Include="src\win32.hh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -14,8 +14,10 @@ public:
 	void cleanup() noexcept;
 
 private:
-	Image _cover;
 	Texture2D _tex;
+	Texture2D _main_border;
+	Texture2D _cover_border;
+
 	Shader _fs_corner_radius;
 
 };
