@@ -25,10 +25,27 @@
     <ClCompile Include="src\main.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\fs_corner_radius.hh">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fluimp.hh">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\win32.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fluimp.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="x64\Debug\1.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\win32.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

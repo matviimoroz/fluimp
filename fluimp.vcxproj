@@ -139,10 +139,17 @@
     <None Include="fluimp.slnx" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\fluimp.cc" />
+    <ClCompile Include="src\fluimp.hh" />
+    <ClCompile Include="src\fs_corner_radius.hh" />
     <ClCompile Include="src\main.cc" />
+    <ClCompile Include="src\win32.cc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="x64\Debug\1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\win32.hh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
