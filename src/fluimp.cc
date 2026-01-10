@@ -1,7 +1,7 @@
 #include "fluimp.hh"
 
 #include "win32.hh"
-#include "shaders.hh"
+#include "shader_code.hh"
 
 #include <raylib.h>
 
@@ -13,10 +13,6 @@ void Fluimp::init() noexcept {
 
     init_win32(GetWindowHandle());
 
-    _tex = LoadTexture("1.jpg");
-    _main_border = LoadTexture("main_border.png");
-    _cover_border = LoadTexture("cover_border.png");
-    
     _fs_corner_radius = LoadShaderFromMemory(NULL, fs_corner_radius);
 }
 
@@ -27,27 +23,23 @@ void Fluimp::update() noexcept {
 void Fluimp::render() noexcept {
     ClearBackground(Color{ 0, 0, 0, 0 });
 
-    DrawTexture(_main_border, 1, 1, WHITE);
+    _textures("main_border.png", 1, 1, 498, 498);
 
     BeginShaderMode(_fs_corner_radius);
     {
-        float radiusVal[1] = { 8.0f };
-        SetShaderValue(_fs_corner_radius, GetShaderLocation(_fs_corner_radius, "radius"), radiusVal, SHADER_UNIFORM_FLOAT);
-        float texSize[2] = { (float)_tex.width, (float)_tex.height };
-        SetShaderValue(_fs_corner_radius, GetShaderLocation(_fs_corner_radius, "texSize"), texSize, SHADER_UNIFORM_VEC2);
-        DrawTexturePro(_tex, Rectangle{ 0, 0, (float)_tex.width, (float)_tex.height}, Rectangle{ 25, 25, 450, 450 }, Vector2{ 0, 0 }, 0.0, WHITE);
+        //float radiusVal[1] = { 8.0f };
+        //SetShaderValue(_fs_corner_radius, GetShaderLocation(_fs_corner_radius, "radius"), radiusVal, SHADER_UNIFORM_FLOAT);
+        //float texSize[2] = { (float)_tex.width, (float)_tex.height };
+        //SetShaderValue(_fs_corner_radius, GetShaderLocation(_fs_corner_radius, "texSize"), texSize, SHADER_UNIFORM_VEC2);
+        _textures("cover_example.jpg", 25, 25, 450, 450);
     }
     EndShaderMode();
 
-    DrawTexture(_cover_border, 25, 25, WHITE);
+    _textures("cover_border.png", 24, 24, 452, 452);
 }
 
 void Fluimp::cleanup() noexcept {
-    UnloadTexture(_tex);
-    UnloadTexture(_main_border);
-
     UnloadShader(_fs_corner_radius);
 
     CloseWindow();
-
 }

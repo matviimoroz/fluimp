@@ -1,23 +1,23 @@
-#pragma once
+	#pragma once
 
-#include <raylib.h>
+	#include <raylib.h>
 
-class Fluimp {
-public:
-	bool running{ true };
+	#include "textures.hh"
 
-	void init() noexcept;
+	class Fluimp {
+	public:
+		bool running{ true };
 
-	void update() noexcept;
-	void render() noexcept;
+		void init() noexcept;
 
-	void cleanup() noexcept;
+		void update() noexcept;
+		void render() noexcept;
 
-private:
-	Texture2D _tex;
-	Texture2D _main_border;
-	Texture2D _cover_border;
+		void cleanup() noexcept;
 
-	Shader _fs_corner_radius;
+	private:
+		Textures _textures;
 
-};
+		Shader _fs_corner_radius;
+
+	};

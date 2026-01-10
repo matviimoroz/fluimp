@@ -50,7 +50,7 @@
     <ClInclude Include="src\win32.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\shaders.hh">
+    <ClInclude Include="src\shader_code.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

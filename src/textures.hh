@@ -2,12 +2,12 @@
 #include <unordered_map>
 #include <raylib.h>
 
-class Texs {
+class Textures {
 public:
-	void operator()(std::string texture_name, std::string path, unsigned int x, unsigned int y, unsigned int width, unsigned int height) noexcept;
+	void operator()(std::string path, float x, float y, float width, float height) noexcept;
 
-	void clear() noexcept;
+	~Textures() noexcept;
 
 private:
-	std::unordered_map<std::string, Texture> textures;
+	std::unordered_map<std::string, Texture> _textures;
 };
