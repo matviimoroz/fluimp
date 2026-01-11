@@ -2,7 +2,8 @@
 
 #include <raylib.h>
 
-Vector2 Textures::operator()(std::string path, float x, float y, float width, float height) noexcept {
+// textures from files are uniquely identified by path
+Vector2 Textures::file(std::string path, float x, float y, float width, float height) noexcept {
 	if (!_textures.contains(path)) {
 		_textures[path] = LoadTexture(path.c_str());
 	} 

@@ -18,6 +18,12 @@
 	private:
 		Textures _textures;
 
-		Shader _fs_corner_radius;
+		Texture _cover_texture;
+		Texture _cover_blurred_texture;
+		Shader _blur;
+
+		Image _cover;
+		Image _mask;
+		Image _cover_blurred;
 
 	};
