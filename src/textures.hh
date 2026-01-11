@@ -4,7 +4,7 @@
 
 class Textures {
 public:
-	Vector2 file(std::string path, float x, float y, float width, float height) noexcept;
+	Vector2 file(std::string path, float x, float y, float width, float height, Color color, bool aa) noexcept;
 
 	~Textures() noexcept;
 

@@ -35,17 +35,26 @@ struct WINDOWCOMPOSITIONATTRIBDATA {
 
 typedef BOOL(WINAPI* pSetWindowCompositionAttribute)(HWND, WINDOWCOMPOSITIONATTRIBDATA*);
 
-LRESULT CALLBACK CustomWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-    if (msg == WM_NCHITTEST) {
+LRESULT CALLBACK CustomWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    if (msg == WM_NCHITTEST)
+    {
         POINT pt = {
             GET_X_LPARAM(lParam),
             GET_Y_LPARAM(lParam)
         };
+
         ScreenToClient(hwnd, &pt);
-        return HTCAPTION;
+
+        if (pt.y >= 0 && pt.y < 25)
+            return HTCAPTION;
+
+        return HTCLIENT;
     }
+
     return CallWindowProc(originalProc, hwnd, msg, wParam, lParam);
 }
+
 
 void init_win32(void* yehwnd) noexcept {
 
