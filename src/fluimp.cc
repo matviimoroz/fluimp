@@ -5,10 +5,11 @@
 
 #include <algorithm>
 #include <raylib.h>
+#include <rlgl.h>
 
 void Fluimp::init() noexcept {
     SetTraceLogLevel(LOG_ALL);
-    SetConfigFlags(FLAG_WINDOW_UNDECORATED | /*FLAG_VSYNC_HINT |*/  FLAG_WINDOW_TRANSPARENT | FLAG_MSAA_4X_HINT);
+    SetConfigFlags(FLAG_WINDOW_UNDECORATED | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT | FLAG_WINDOW_TRANSPARENT);
 
     InitWindow(500, 500, "fluimp");
 
@@ -25,6 +26,8 @@ void Fluimp::init() noexcept {
     _cover_blurred_texture = LoadTextureFromImage(_cover_blurred);
 
     _circle_clip = LoadShaderFromMemory(NULL, circle);
+
+    rlSetBlendFactorsSeparate(RL_SRC_ALPHA, RL_ONE_MINUS_SRC_ALPHA, RL_ONE, RL_ONE, RL_FUNC_ADD, RL_MAX);
 }
 
 void Fluimp::update() noexcept {
@@ -32,6 +35,7 @@ void Fluimp::update() noexcept {
 }
 
 void Fluimp::render() noexcept {
+    BeginBlendMode(RL_BLEND_CUSTOM_SEPARATE);
     ClearBackground(Color{ 0, 0, 0, 0 });
 
     _textures.file("main_border.png", 1, 1, 498, 498, WHITE, false);
@@ -62,6 +66,8 @@ void Fluimp::render() noexcept {
         float y = center.y - size * 0.5f;
 
         float blurRadius = baseRadius * scale;
+        
+        _textures.file("pause_shadow.png", x - 20.0f, y - 20.0f, size + 40.0f, size + 40.0f, WHITE, true);
 
         float texSize[2] = { (float)_cover_blurred_texture.width, (float)_cover_blurred_texture.height };
         SetShaderValue(_circle_clip, GetShaderLocation(_circle_clip, "texSize"), texSize, SHADER_UNIFORM_VEC2);
@@ -69,8 +75,6 @@ void Fluimp::render() noexcept {
 
         float centervec[2] = { center.x - 25, center.y - 25 };
         SetShaderValue(_circle_clip, GetShaderLocation(_circle_clip, "center"), centervec, SHADER_UNIFORM_VEC2);
-
-        _textures.file("pause_shadow.png", x-20.0f, y-20.0f, size + 40.0f, size + 40.0f, WHITE, true);
 
         BeginShaderMode(_circle_clip);
         {
@@ -99,7 +103,7 @@ void Fluimp::render() noexcept {
 
     }
 
-    DrawFPS(10, 10);
+    EndBlendMode();
 }
 
 void Fluimp::cleanup() noexcept {

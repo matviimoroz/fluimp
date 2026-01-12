@@ -33,4 +33,5 @@
 		float _pause_fade = 0.0f;
 		float _hover_anim = 0.0f;
 
+		RenderTexture _everything;
 	};

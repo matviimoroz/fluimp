@@ -87,6 +87,7 @@ void init_win32(void* yehwnd) noexcept {
         sizeof(accent)
     };
 
+
     HMODULE hUser = GetModuleHandle(TEXT("user32.dll"));
     if (hUser) {
         pSetWindowCompositionAttribute SetWindowCompositionAttribute =
