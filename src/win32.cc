@@ -37,19 +37,56 @@ typedef BOOL(WINAPI* pSetWindowCompositionAttribute)(HWND, WINDOWCOMPOSITIONATTR
 
 LRESULT CALLBACK CustomWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    if (msg == WM_NCHITTEST)
+    static bool dragging = false;
+    static POINT dragOffset = {};
+
+    switch (msg)
     {
-        POINT pt = {
-            GET_X_LPARAM(lParam),
-            GET_Y_LPARAM(lParam)
-        };
+        case WM_LBUTTONDOWN:
+        {
+            POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+            if (pt.y >= 0 && pt.y < 25) // draggable area (like title bar)
+            {
+                dragging = true;
+                SetCapture(hwnd); // capture mouse
+                dragOffset.x = pt.x;
+                dragOffset.y = pt.y;
+            }
+            break;
+        }
 
-        ScreenToClient(hwnd, &pt);
+        case WM_MOUSEMOVE:
+        {
+            if (dragging)
+            {
+                POINT pt;
+                GetCursorPos(&pt); // screen coordinates
+                SetWindowPos(hwnd, nullptr,
+                    pt.x - dragOffset.x,
+                    pt.y - dragOffset.y,
+                    0, 0, SWP_NOSIZE | SWP_NOZORDER);
+            }
+            break;
+        }
 
-        if (pt.y >= 0 && pt.y < 25)
-            return HTCAPTION;
+        case WM_LBUTTONUP:
+        {
+            if (dragging)
+            {
+                dragging = false;
+                ReleaseCapture();
+            }
+            break;
+        }
 
-        return HTCLIENT;
+        case WM_NCHITTEST:
+        {
+            // let us still resize from borders if needed
+            POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+            ScreenToClient(hwnd, &pt);
+            if (pt.y >= 0 && pt.y < 25) return HTCLIENT; // draggable handled manually
+            return HTCLIENT;
+        }
     }
 
     return CallWindowProc(originalProc, hwnd, msg, wParam, lParam);

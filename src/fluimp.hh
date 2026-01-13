@@ -1,37 +1,45 @@
-	#pragma once
+#pragma once
 
-	#include <raylib.h>
+#include <raylib.h>
+#include <string>
 
-	#include "textures.hh"
+#include "textures.hh"
 
-	class Fluimp {
-	public:
-		bool running{ true };
+class Fluimp {
+public:
+	bool running{ true };
 
-		void init() noexcept;
+	void init() noexcept;
 
-		void update() noexcept;
-		void render() noexcept;
+	void update() noexcept;
+	void render() noexcept;
 
-		void cleanup() noexcept;
+	void cleanup() noexcept;
 
-	private:
-		Textures _textures;
+private:
+	Textures _textures;
 
-		Texture _cover_texture;
-		Texture _cover_blurred_texture;
+	Texture _cover_texture;
+	Texture _cover_blurred_texture;
 
-		Shader _circle_clip;
+	Shader _circle_clip;
 
-		Image _cover;
-		Image _mask;
-		Image _cover_blurred;
+	Image _cover;
+	Image _mask;
+	Image _cover_blurred;
 
-		Vector2 _mouse_pos;
+	Vector2 _mouse_pos;
 
-		bool _paused = false;
-		float _pause_fade = 0.0f;
-		float _hover_anim = 0.0f;
+	bool _paused = false;
+	float _pause_fade = 0.0f;
+	float _hover_anim = 0.0f;
 
-		RenderTexture _everything;
-	};
+	RenderTexture _everything;
+
+	FilePathList _songs;
+	unsigned int _songs_count;
+	unsigned int _current_song_index;
+	Music _song;
+	const char* _current_song_path;
+	bool _skip = true;
+};
