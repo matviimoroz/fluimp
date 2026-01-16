@@ -31,15 +31,17 @@ private:
 	Vector2 _mouse_pos;
 
 	bool _paused = false;
-	float _pause_fade = 0.0f;
-	float _hover_anim = 0.0f;
+	float _pause_fade_anim = 0.0f;
+	float _pause_hover_anim = 0.0f;
 
 	RenderTexture _everything;
 
 	FilePathList _songs;
-	unsigned int _songs_count;
 	unsigned int _current_song_index;
 	Music _song;
 	const char* _current_song_path;
+
 	bool _skip = true;
+	float _skip_hover_anim = 0.0f;
+
 };

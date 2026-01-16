@@ -146,17 +146,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\fluimp.cc" />
-    <ClCompile Include="src\fluimp.hh" />
     <ClCompile Include="src\main.cc" />
-    <ClCompile Include="src\textures.hh" />
     <ClCompile Include="src\win32.cc" />
     <ClCompile Include="src\textures.cc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="x64\Debug\1.jpg" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="src\fluimp.hh" />
     <ClInclude Include="src\shader_code.hh" />
+    <ClInclude Include="src\textures.hh" />
     <ClInclude Include="src\win32.hh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
