@@ -3,9 +3,8 @@
 #include "win32.hh"
 #include "shader_code.hh"
 
-#include <algorithm>
 #include <raylib.h>
-#include <format>
+#include <raymath.h>
 #include <rlgl.h>
 #include <random>
 
@@ -79,11 +78,8 @@ void Fluimp::render() noexcept {
     ClearBackground(Color{ 0, 0, 0, 0 });
 
     _textures.file("assets/main_border.png", 1, 1, 498, 498, WHITE, false);
-
     _textures.file("assets/cover_shadow.png", 0, 0, 500, 500, WHITE, false);
-
     DrawTexture(_cover_texture, 25, 25, WHITE);
-
     _textures.file("assets/cover_border.png", 24, 24, 452, 452, WHITE, false);
 
     // pause button
@@ -94,90 +90,35 @@ void Fluimp::render() noexcept {
 
         bool hovered = CheckCollisionPointCircle(_mouse_pos, center, baseRadius);
 
-        float hoverTarget = hovered ? 1.0f : 0.0f;
-        _pause_hover_anim += (hoverTarget - _pause_hover_anim) * 12.0f * GetFrameTime();
-        _pause_hover_anim = std::clamp(_pause_hover_anim, 0.0f, 1.0f);
+        float hover_target = hovered ? 1.0f : 0.0f;
+        _pause_hover_anim += (hover_target - _pause_hover_anim) * 12.0f * GetFrameTime();
+        if (fabsf(_pause_hover_anim - hover_target) < 0.035f) {
+            _pause_hover_anim = hover_target;
+        }
 
-        float h = _pause_hover_anim * _pause_hover_anim * (3.0f - 2.0f * _pause_hover_anim);
-        float scale = 1.0f + h * 0.15f;
+        float scale = 1.0f + _pause_hover_anim * 0.2f;
 
         float size = baseSize * scale;
         float x = center.x - size * 0.5f;
         float y = center.y - size * 0.5f;
 
         float blurRadius = baseRadius * scale;
-        
-        _textures.file("assets/pause_shadow.png", x - 20.0f, y - 20.0f, size + 40.0f, size + 40.0f, WHITE, true);
 
-        float texSize[2] = { (float)_cover_blurred_texture.width, (float)_cover_blurred_texture.height };
-        SetShaderValue(_circle_clip, GetShaderLocation(_circle_clip, "texSize"), texSize, SHADER_UNIFORM_VEC2);
-        SetShaderValue(_circle_clip, GetShaderLocation(_circle_clip, "radius"), &blurRadius, SHADER_UNIFORM_FLOAT);
-
-        float centervec[2] = { center.x - 25, center.y - 25 };
-        SetShaderValue(_circle_clip, GetShaderLocation(_circle_clip, "center"), centervec, SHADER_UNIFORM_VEC2);
-
-        BeginShaderMode(_circle_clip);
-        {
-            DrawTexture(_cover_blurred_texture, 25, 25, WHITE);
-        }
-        EndShaderMode();
-
-        if (hovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            _paused = !_paused;
-        }
-
-        float target = _paused ? 1.0f : 0.0f;
-        _pause_fade_anim += (target - _pause_fade_anim) * 20.0f * GetFrameTime();
-        _pause_fade_anim = std::clamp(_pause_fade_anim, 0.0f, 1.0f);
-
-        float t = _pause_fade_anim * _pause_fade_anim * (3.0f - 2.0f * _pause_fade_anim);
-
-        Color pauseCol = WHITE;
-        pauseCol.a = (unsigned char)(t * 255);
-
-        Color playCol = WHITE;
-        playCol.a = (unsigned char)((1.0f - t) * 255);
-
-        _textures.file("assets/pause.png", x, y, size, size, pauseCol, true);
-        _textures.file("assets/not_paused.png", x, y, size, size, playCol, true);
-    }
-
-    // forward button
-    {
-        const Vector2 center = { 320.0f + 72.0f / 2.0f, 365.0f + 72.0f / 2.0f };
-        const float radius = 75.0f / 2.0f;
-        const float diameter = 75.0f;
-
-        bool hovered = CheckCollisionPointCircle(_mouse_pos, center, diameter);
-
-        float hoverTarget = hovered ? 1.0f : 0.0f;
-        float prev_anim = _skip_hover_anim;
-
-        _skip_hover_anim += (hoverTarget - _skip_hover_anim) * 12.0f * GetFrameTime();
-
-        float delta_anim = _skip_hover_anim - prev_anim;
-
-        float h = _skip_hover_anim * _skip_hover_anim * (3.0f - 2.0f * _skip_hover_anim);
-        float scale = 1.0f + h * 0.15f;
-
-        float size = baseSize * scale;
-        float x = center.x - size * 0.5f;
-        float y = center.y - size * 0.5f;
-
-        float blurRadius = baseRadius * scale;
+        float shadowSize = (baseSize + 40.0f) * scale;
+        float shadowX = center.x - shadowSize * 0.5f;
+        float shadowY = center.y - shadowSize * 0.5f;
 
         _textures.file(
-            "assets/forward_shadow.png",
-            x - 20.0f, y - 20.0f,
-            size + 40.0f, size + 40.0f,
-            WHITE, true
+            "assets/pause_shadow.png",
+            shadowX,
+            shadowY,
+            shadowSize,
+            shadowSize,
+            WHITE,
+            true
         );
 
-        float texSize[2] = {
-            (float)_cover_blurred_texture.width,
-            (float)_cover_blurred_texture.height
-        };
-
+        float texSize[2] = { (float)_cover_blurred_texture.width, (float)_cover_blurred_texture.height };
         SetShaderValue(_circle_clip, GetShaderLocation(_circle_clip, "texSize"), texSize, SHADER_UNIFORM_VEC2);
         SetShaderValue(_circle_clip, GetShaderLocation(_circle_clip, "radius"), &blurRadius, SHADER_UNIFORM_FLOAT);
 
@@ -189,13 +130,105 @@ void Fluimp::render() noexcept {
         EndShaderMode();
 
         if (hovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            // onClick();
+            _paused = !_paused;
         }
+
+        float target = _paused ? 1.0f : 0.0f;
+        _pause_fade_anim += (target - _pause_fade_anim) * 20.0f * GetFrameTime();
+
+        float t = _pause_fade_anim * _pause_fade_anim * (3.0f - 2.0f * _pause_fade_anim);
+
+        Color pauseCol = WHITE;
+        pauseCol.a = (unsigned char)(t * 255);
+
+        Color playCol = WHITE;
+        playCol.a = (unsigned char)((1.0f - t) * 255);
+
+        float iconSize = size;
+        float iconX = center.x - iconSize * 0.5f;
+        float iconY = center.y - iconSize * 0.5f;
+
+        _textures.file("assets/pause.png", iconX, iconY, iconSize, iconSize, pauseCol, true);
+        _textures.file("assets/not_paused.png", iconX, iconY, iconSize, iconSize, playCol, true);
+    }
+
+
+    // forward button
+    {
+        constexpr float btnSize = 75.0f;
+        constexpr Vector2 btnPos = { 320.0f, 365.0f };
+
+        static float hover_anim = 0.0f;
+
+        float baseRadius = btnSize * 0.5f;
+        Vector2 btnCenter = {
+            btnPos.x + baseRadius,
+            btnPos.y + baseRadius
+        };
+
+        bool hovered = CheckCollisionPointCircle(_mouse_pos, btnCenter, baseRadius);
+
+        float hover_target = hovered ? 1.0f : 0.0f;
+        hover_anim += (hover_target - hover_anim) * 12.0f * GetFrameTime();
+        if (fabsf(hover_anim - hover_target) < 0.035f) {
+            hover_anim = hover_target;
+        }
+
+        float scale = 1.0f + hover_anim * 0.2f;
+
+        float radius = baseRadius * scale;
+
+        float shadowSize = (btnSize + 40.0f) * scale;
+        Vector2 shadowPos = {
+            btnCenter.x - shadowSize * 0.5f,
+            btnCenter.y - shadowSize * 0.5f
+        };
+
+        _textures.file(
+            "assets/forward_shadow.png",
+            shadowPos.x,
+            shadowPos.y,
+            shadowSize,
+            shadowSize,
+            WHITE,
+            true
+        );
+
+        float texSize[2] = {
+            (float)_cover_blurred_texture.width,
+            (float)_cover_blurred_texture.height
+        };
+        SetShaderValue(_circle_clip, GetShaderLocation(_circle_clip, "texSize"), texSize, SHADER_UNIFORM_VEC2);
+        SetShaderValue(_circle_clip, GetShaderLocation(_circle_clip, "radius"), &radius, SHADER_UNIFORM_FLOAT);
+
+        float center[2] = {
+            btnCenter.x - 25.0f,
+            btnCenter.y - 25.0f
+        };
+        SetShaderValue(_circle_clip, GetShaderLocation(_circle_clip, "center"), center, SHADER_UNIFORM_VEC2);
+
+        BeginShaderMode(_circle_clip);
+        DrawTexture(_cover_blurred_texture, 25, 25, WHITE);
+        EndShaderMode();
+
+        if (hovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            TraceLog(LOG_DEBUG, "CLICKED: SKIP");
+        }
+
+        float iconSize = btnSize * scale;
+        Vector2 iconPos = {
+            btnCenter.x - iconSize * 0.5f,
+            btnCenter.y - iconSize * 0.5f
+        };
 
         _textures.file(
             "assets/forward.png",
-            x, y, size, size,
-            WHITE, false 
+            iconPos.x,
+            iconPos.y,
+            iconSize,
+            iconSize,
+            WHITE,
+            false
         );
     }
 

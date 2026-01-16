@@ -23,6 +23,7 @@ private:
 	Texture _cover_blurred_texture;
 
 	Shader _circle_clip;
+	Shader _perspective;
 
 	Image _cover;
 	Image _mask;
@@ -34,14 +35,13 @@ private:
 	float _pause_fade_anim = 0.0f;
 	float _pause_hover_anim = 0.0f;
 
-	RenderTexture _everything;
-
 	FilePathList _songs;
 	unsigned int _current_song_index;
 	Music _song;
 	const char* _current_song_path;
-
 	bool _skip = true;
-	float _skip_hover_anim = 0.0f;
+
+
+	
 
 };
